@@ -19,7 +19,11 @@
   "homepage": "https://github.com/RomanIvanytskyi/Leisurester-BC#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "eslint": "^7.30.0",
+    "express": "^4.17.1",
+    "mongo": "^0.1.0",
+    "mongoose": "^5.13.2",
+    "prettier": "^2.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
