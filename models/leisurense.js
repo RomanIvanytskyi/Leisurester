@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+mongoose.set("useCreateIndex", true);
+mongoose.set("useFindAndModify", false);
 const Schema = mongoose.Schema;
 
 const LeisureSchema = new Schema({
@@ -16,15 +18,13 @@ const LeisureSchema = new Schema({
   },
   persons: {
     type: Number,
-    required: true,
   },
   description: {
     type: String,
-    required: true,
   },
   file: {
     type: String,
-    default: "",
+    default: " ",
   },
 });
 
