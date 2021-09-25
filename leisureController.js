@@ -33,8 +33,6 @@ const getArray = (max) => {
     }
     arr[i] = random;
   }
-  console.log();
-  console.log(arr);
   return arr;
 };
 
@@ -43,33 +41,28 @@ class leisureController {
     try {
       Post.find({}, (err, found) => {
         res.json(found);
-        console.log(found);
       });
     } catch (e) {
-      console.log(e);
-      return res.status(400).json({ message: "error" });
+      return res.send({ err: e });
     }
   }
 
   async addPage(req, res) {
     try {
-      console.log(req.body.id);
       await Post.findOne({ _id: req.body.id });
       return res.send(req.body.id);
     } catch (e) {
-      console.log("beda");
+      return res.send({ err: e });
     }
   }
 
   async getPage(req, res) {
-    console.log(req.body.id);
     try {
       await Post.findOne({ _id: req.body.id }, (err, found) => {
         res.json(found);
-        console.log(found);
       });
     } catch (e) {
-      console.log(e);
+      return res.send({ err: e });
     }
   }
 
@@ -87,8 +80,7 @@ class leisureController {
       await post.save();
       res.send(post);
     } catch (e) {
-      console.log("error");
-      res.status(400).json({ message: "Registration error" });
+      return res.send({ err: e });
     }
   }
   async deletePost(req, res) {
@@ -96,7 +88,7 @@ class leisureController {
       await Post.deleteOne({ _id: req.body.id });
       res.send("deleted " + req.body.id);
     } catch (e) {
-      console.log(e);
+      return res.send({ err: e });
     }
   }
 
@@ -105,9 +97,10 @@ class leisureController {
       await proposition.deleteOne({ _id: req.body.id });
       res.send("deleted " + req.body.id);
     } catch (e) {
-      console.log(e);
+      return res.send({ err: e });
     }
   }
+
   async addProposition(req, res) {
     try {
       const proposition = new Proposition({
@@ -119,9 +112,8 @@ class leisureController {
       });
       await proposition.save();
       res.send(proposition);
-      console.log(proposition);
     } catch (e) {
-      res.status(400).json({ message: "error" });
+      return res.send({ err: e });
     }
   }
 
@@ -131,13 +123,11 @@ class leisureController {
         res.json(found);
       });
     } catch (e) {
-      console.log(e);
-      res.status(400).json({ message: "error" });
+      return res.send({ err: e });
     }
   }
 
   async editPost(req, res) {
-    console.log(req.body.id);
     const updated = await Post.findOneAndUpdate(
       { _id: req.body.id },
       {
@@ -159,10 +149,29 @@ class leisureController {
         });
       })
       .catch((error) => {
-        res.status(400).json({
-          error: error,
-        });
+        return res.send({ err: e });
       });
+  }
+
+  async postSearch(req, res) {
+  
+    if (req.body && req.body.name) {
+      try {
+        Post.find({ name: { $regex: req.body.name } }, (err, found) => {
+          found ? res.send({ posts: found }) : res.send({ data: err });
+        });
+      } catch (e) {
+        res.send({ data: e });
+      }
+    } else {
+      try {
+        Post.find({}, (err, found) => {
+          found ? res.send({ posts: found }) : res.send({ data: err });
+        });
+      } catch (e) {
+        res.send({ data: e });
+      }
+    }
   }
 
   async Random(req, res) {
@@ -172,8 +181,7 @@ class leisureController {
 
       await Post.find({}, (err, found) => {
         if (!found) {
-          res.status(404).json({ err });
-          return;
+          return res.send({ err });
         } else {
           idArray = found.map((item) => {
             return item._id;
@@ -200,7 +208,6 @@ class leisureController {
         return;
       });
     } catch (e) {
-      console.log(e);
       res.status(400).json({ message: "error" });
     }
   }

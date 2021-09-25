@@ -18,6 +18,6 @@ router.post(
 router.post("/login", controller.login);
 router.get("/users", controller.getUsers);
 router.get("/logout", controller.logout);
-router.post("/me",controller.me )
+router.post("/me", authMiddleware, controller.me);
 
 module.exports = router;

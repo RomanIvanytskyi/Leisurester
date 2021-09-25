@@ -14,4 +14,5 @@ router.post("/delete", controller.deletePost);
 router.post("/deleteProposition", controller.deleteProposition);
 router.post("/addProposition", controller.addProposition);
 router.post("/editPost", controller.editPost);
+router.post("/postSearch", controller.postSearch);
 module.exports = router;
